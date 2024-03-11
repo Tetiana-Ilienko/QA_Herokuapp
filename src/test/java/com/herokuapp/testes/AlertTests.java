@@ -23,8 +23,8 @@ public class AlertTests extends TestBase{
 
     @Test
     public void clickJSConfirmTest() {
-        new AlertsPage(driver).clickJSConfirm()
-                .verifyResultConfirm("You clicked: Ok");
+        new AlertsPage(driver).clickJSConfirm("Abbrechen")
+                .verifyResultConfirm("Cancel");
     }
 
     @Test

@@ -32,13 +32,18 @@ public class AlertsPage extends BasePage {
     @FindBy(xpath = "//button[text()='Click for JS Confirm']")
     WebElement JSConfirm;
 
-    public AlertsPage clickJSConfirm() {
+    public AlertsPage clickJSConfirm(String confirm) {
         click(JSConfirm);
-        driver.switchTo().alert().accept();
+        if (confirm != null && confirm.equals("OK")) {
+            driver.switchTo().alert().accept();
+        } else if (confirm != null && confirm.equals("Abbrechen")) {
+            driver.switchTo().alert().dismiss();
+        }
         return this;
+
     }
 
-    @FindBy(xpath = "//*[text()= 'You clicked: Ok']")
+    @FindBy(id = "result")
     WebElement confirmResult1;
     public AlertsPage verifyResultConfirm(String result) {
         Assert.assertTrue(confirmResult1.getText().contains(result));
