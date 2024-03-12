@@ -1,0 +1,68 @@
+package com.herokuapp.pages.pages;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+
+public class RedirectionPage extends BasePage {
+
+    public RedirectionPage(WebDriver driver) {
+        super(driver);
+    }
+
+    @FindBy(xpath = "//*[@href='/redirector']")
+    WebElement redirect;
+     public RedirectionPage clickRedirection(){
+         click(redirect);
+         return this;
+    }
+
+
+    @FindBy(id = "redirect")
+    WebElement redirectLink;
+
+    public RedirectionPage clickRedirectLink() {
+        click(redirectLink);
+
+        return this;
+    }
+
+    @FindBy(css = "a")
+    List<WebElement> links;
+
+
+    public RedirectionPage clickLinks() {
+
+        for (int i = 0; i < links.size(); i++) {
+            WebElement element = links.get(i);
+            String url = element.getAttribute("href");
+            verifyLink(url);
+
+        }
+        return this;
+    }
+
+    public void verifyLink(String url) {
+        try {
+            URL linkUrl = new URL(url);
+
+            HttpURLConnection httpURLConnection = (HttpURLConnection) linkUrl.openConnection();
+            httpURLConnection.setConnectTimeout(5000);
+            httpURLConnection.connect();
+            if (httpURLConnection.getResponseCode() >= 400) {
+                System.out.println(url + " - " + httpURLConnection.getResponseMessage() + " is broken link");
+            } else {
+                System.out.println(url + " - " + httpURLConnection.getResponseMessage());
+            }
+        } catch (Exception e) {
+            System.out.println(url + " - " + e.getMessage() + " link with exception");
+        }
+    }
+
+
+
+}
